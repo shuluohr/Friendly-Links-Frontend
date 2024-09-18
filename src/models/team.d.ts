@@ -11,8 +11,10 @@ export type TeamType = {
     maxNum: number;
     password?: string;
     status: number;
-    // userId?: number;
+    userId?: number;
     createTime: Date;
     updateTime: Date;
     createUser?: UserType;
+    hasJoinTeamNum: number;
+    hasJoinTeam: boolean;
 }

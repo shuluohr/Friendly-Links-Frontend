@@ -1,7 +1,7 @@
 <template>
 <!--NavBar导航栏-->
   <van-nav-bar
-      title="标题"
+      :title
       right-text="按钮"
       left-arrow
       @click-left="onClickLeft"
@@ -12,14 +12,7 @@
     </template>
   </van-nav-bar>
 
-  <!--刷新功能和提示-->
-  <van-pull-refresh
-      v-model="isLoading"
-      success-text="刷新成功"
-      @refresh="onRefresh"
-  >
-    <p>刷新次数: {{ count }}</p>
-  </van-pull-refresh>
+
 
   <div id="content">
     <router-view/>
@@ -27,7 +20,7 @@
 
 
 <!--底部tabbar-->
-  <van-tabbar  @change="onChange" route>
+  <van-tabbar  route>
     <van-tabbar-item to="/" icon="home-o" name="index">主页</van-tabbar-item>
     <van-tabbar-item to="/team" icon="search" name="team">队伍</van-tabbar-item>
     <van-tabbar-item to="/user" icon="friends-o" name="user">个人</van-tabbar-item>
@@ -38,12 +31,25 @@
 
 
 <script setup lang="ts">
-  import {showToast} from "vant";
-  import {useRouter} from "vue-router";
-  import {ref} from "vue";
-  //import {createFilter} from "vite";
+import {useRouter} from "vue-router";
+import {ref} from "vue";
+import {routes} from "../config/route.ts";
+//import {createFilter} from "vite";
 
   const router = useRouter();
+  const DEFINE_TITLE = '伙伴匹配'
+  const title = ref(DEFINE_TITLE);
+
+
+  /**
+   * 根据路由切换标题
+   */
+  router.beforeEach((to) => {
+    const toPath = to.path;
+    const myRoute = routes.find( route => toPath == route.path)
+    title.value = myRoute?.title ?? DEFINE_TITLE;
+  })
+
   const onClickLeft = () => {
     router.back()
   };
@@ -51,19 +57,7 @@
     router.push('/search')
   };
 
-  // const active = ref('index');
-  const onChange = (index:string) => showToast(`标签 ${index}`);
 
-  // 实现刷新的功能
-  const count = ref(0);
-  const isLoading = ref(false);
-  const onRefresh = () => {
-    setTimeout(() => {
-      showToast('刷新成功');
-      isLoading.value = false;
-      count.value++;
-    }, 1000);
-  }
 </script>
 
 <style scoped>

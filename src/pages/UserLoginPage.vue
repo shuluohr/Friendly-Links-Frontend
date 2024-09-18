@@ -28,14 +28,16 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
-  import {useRouter} from "vue-router";
+  import {useRoute, useRouter} from "vue-router";
   import myAxios from "../plugins/myAxios.ts";
   import {showFailToast, showSuccessToast} from "vant";
 
   const router = useRouter()
+  const route = useRoute()
 
   const userAccount = ref('');
   const userPassword = ref('');
+  console.log(route.query)
   const onSubmit = async () => {
     const loginResult = await myAxios.post('/user/login',{
       userAccount: userAccount.value,
@@ -44,7 +46,9 @@
     console.log(loginResult)
     if (loginResult.data.code === 20000 && loginResult.data.data ){
       showSuccessToast('登录成功')
-      router.replace('/')
+
+      const redirectUrl = route.query?.redirect as string ?? '/';
+      window.location.href = redirectUrl;
     }else {
       showFailToast('登录失败')
     }

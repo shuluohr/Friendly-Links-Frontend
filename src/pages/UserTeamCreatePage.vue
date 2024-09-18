@@ -5,8 +5,8 @@
       <van-tab title="公开" name="public"/>
       <van-tab title="加密" name="secret"/>
     </van-tabs>
-    <van-button class="add-button" type="primary" icon="plus"  @click="toAddTeam"/>
-    <team-card-list :team-list="teamList" />
+    <van-button class="add-button" icon="plus" type="primary" @click="toAddTeam"></van-button>
+    <team-card-list :team-list="teamList"/>
     <!-- 搜索提示 -->
     <van-empty v-if="!teamList || teamList.length < 1" image="search" description="找不到对应的队伍" />
   </div>
@@ -36,7 +36,6 @@ const onTabChange = (name:string)=>{
     listTeam(searchText.value,2)
   }
 }
-
 //跳转到添加队伍页面
 const toAddTeam = () =>{
     route.push({
@@ -46,15 +45,13 @@ const toAddTeam = () =>{
 
   const teamList = ref([])
 
-
   /**
-   * 所有队伍
+   * 我创建了的队伍
    * @param val
-   * @param status
    */
   //这里应该传队伍状态，不然只能看到公开的队伍
   const listTeam = async (val:string = '',status = 0)=>{
-    const res = await myAxios.get('/team/list',{
+    const res = await myAxios.get('/team/list/my/create',{
     params:{
       searchText: val,
       status,
@@ -63,12 +60,11 @@ const toAddTeam = () =>{
   });
     if (res?.data?.code === 20000 && res?.data?.data){
       teamList.value = res.data.data
+      console.log(teamList.value)
     }else {
       showFailToast('加载队伍失败，请刷新重试')
     }
   }
-
-
 
   //加载队伍信息
   onMounted(async ()=>{

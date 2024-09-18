@@ -1,14 +1,14 @@
 <template>
-  <UserCardList :user-list="userList"/>
+  <user-card-list :user-list="userList" :loading/>
   <!-- 搜索提示 -->
-  <van-empty v-if="!userList || userList.length < 1" image="search" description="搜索不到对应的用户" />
+  <van-empty v-if="loading === false && (!userList || userList.length < 1)" image="search" description="搜索不到对应的用户" />
 </template>
 
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {useRoute} from "vue-router";
 import myAxios from '../plugins/myAxios.ts'
-import {showFailToast, showSuccessToast} from "vant";
+import {showFailToast} from "vant";
 import qs from 'qs'
 import UserCardList from "../components/UserCardList.vue";
 
@@ -16,10 +16,11 @@ import UserCardList from "../components/UserCardList.vue";
 const route = useRoute()
 
 const tags = route.query.tags
-const userList:any = ref([])
-
+const userList:any = ref([{},{},{}])
+const loading = ref<boolean>(true)
 
 onMounted( async ()=>{
+  loading.value = true;
   const userListData =  await myAxios.get('/user/search/tags',{
     params: {
       tagNameList: tags
@@ -30,8 +31,6 @@ onMounted( async ()=>{
   })
       .then(function (response){
         console.log('/user/search/tags success',response)
-        showSuccessToast('请求成功')
-        console.log("response",response)
         return response.data?.data
       })
       .catch(function (error) {
@@ -48,25 +47,10 @@ onMounted( async ()=>{
     })
     userList.value = userListData
   }
+  loading.value = false;
 })
 
 
-/*
-const mockUser = {
-  id: 12345,
-  username: 'admin',
-  userAccount: '1234',
-  avatarUrl: 'https://ts2.cn.mm.bing.net/th?id=OIP-C.hsnwZAr2R2xUr97ScoSjrgAAAA&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2',
-  gender: 0,
-  profile: "阿巴阿巴~",
-  phone: '123123234',
-  email: '2342459812839489@dsaf.com',
-  useRoute: 0,
-  planetCode: '1234',
-  tags: ['java', 'emo', '打工中', '已婚', '交友'],
-  createTime: new Date(),
-}
-const userList:any = ref([mockUser])*/
 
 </script>
 
