@@ -5,10 +5,10 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
 =======
-# 伙伴匹配系统（前端）
+# 心心相印-技术交友平台（前端）
 
 #### 介绍
-伙伴匹配系统的前端功能
+心心相印-技术交友平台的前端功能
 
 #### 软件架构
 软件架构说明
