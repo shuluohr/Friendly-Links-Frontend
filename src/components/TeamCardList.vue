@@ -1,7 +1,7 @@
 <template>
   <van-card
       v-for="team in props.teamList"
-      :thumb="kun"
+      :thumb="shandao"
       :desc="team.description"
       :title="team.name"
   >
@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import {TeamType} from "../models/team";
 import {teamStatusEnum} from "../constants/team.ts";
-import kun from '../assets/kun.png'
+import shandao from '../assets/shandao.jpg'
 import myAxios from "../plugins/myAxios.ts";
 import {showFailToast, showSuccessToast} from "vant";
 import {onBeforeUpdate, onMounted, onUpdated, ref, watchEffect} from 'vue'
