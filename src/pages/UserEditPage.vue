@@ -30,7 +30,7 @@ import {getCurrentUser} from '../services/user.ts'
   const editUser = ref({
   editKey: route.query.editKey,
   editName: route.query.editName,
-  currentValue: route.query.currentValue
+  currentValue: route.query.currentValue,
 })
 
   let {editKey,editName,currentValue} = toRefs(editUser.value)
@@ -40,6 +40,11 @@ import {getCurrentUser} from '../services/user.ts'
     if (!currentUser){
       showFailToast('您还未登录')
       return;
+    }
+    if (currentValue.value === '男'){
+      currentValue.value = 1;
+    }else if (currentValue.value === '女'){
+      currentValue.value = 0;
     }
 
     const res = await myAxios.post('/user/update',{

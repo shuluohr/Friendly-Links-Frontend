@@ -4,6 +4,7 @@
     <van-tabs v-model:active="active" @change="onTabChange">
       <van-tab title="公开" name="public"/>
       <van-tab title="加密" name="secret"/>
+      <van-tab title="私有" name="private"/>
     </van-tabs>
     <van-button class="add-button" icon="plus" type="primary" @click="toAddTeam"></van-button>
     <team-card-list :team-list="teamList"/>
@@ -31,9 +32,11 @@ const onTabChange = (name:string)=>{
   if (name === 'public'){
     //查公开
     listTeam(searchText.value, 0)
-  }else {
+  }else if(name === 'secret'){
     //查加密
     listTeam(searchText.value,2)
+  }else{
+    listTeam(searchText.value,1)
   }
 }
 //跳转到添加队伍页面
@@ -62,7 +65,8 @@ const toAddTeam = () =>{
       teamList.value = res.data.data
       console.log(teamList.value)
     }else {
-      showFailToast('加载队伍失败，请刷新重试')
+      teamList.value = res.data.data
+      showFailToast(res.data.description)
     }
   }
 

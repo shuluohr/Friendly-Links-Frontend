@@ -5,6 +5,7 @@
       :desc="team.description"
       :title="team.name"
   >
+
     <template #tags>
       <van-tag plain type="primary" style="margin-left: 5px;margin-top: 3px;" color="red">
         {{ teamStatusEnum[team.status] }}
@@ -23,12 +24,30 @@
           plain
           @click="()=>{
             joinTeamId = team?.id;
-            if(team.status === 0){
+            if(team.status === 0 || team.status === 1){
               doJoinTeam();
             }else {
               showPasswordDialog = true;
             }
           }">加入队伍
+      </van-button>
+      <van-button
+          v-if="team.hasJoinTeam"
+          size="small" type="primary"
+          plain
+          @click="doGroupChat(team.id)">群聊
+      </van-button>
+      <van-button
+          v-if="team.hasJoinTeam && team.status === 1 && team.userId === currentUser?.id"
+          size="small" type="primary"
+          plain
+          @click="doShareTeam(team.id)">分享房间
+      </van-button>
+      <van-button
+          v-if="team.hasJoinTeam"
+          size="small" type="primary"
+          plain
+          @click="doMemberList(team.id,team.maxNum)">队伍成员
       </van-button>
       <van-button
           v-if="team.userId === currentUser?.id "
@@ -63,8 +82,8 @@ import {TeamType} from "../models/team";
 import {teamStatusEnum} from "../constants/team.ts";
 import shandao from '../assets/shandao.jpg'
 import myAxios from "../plugins/myAxios.ts";
-import {showFailToast, showSuccessToast} from "vant";
-import {onBeforeUpdate, onMounted, onUpdated, ref, watchEffect} from 'vue'
+import {showFailToast, showSuccessToast,showDialog} from "vant";
+import {onMounted, ref} from 'vue'
 import {getCurrentUser} from "../services/user.ts";
 import {useRouter} from "vue-router";
 
@@ -91,6 +110,8 @@ onMounted(async()=> {
   currentUser.value = await getCurrentUser()
 })
 
+
+
 /**
  * 加入队伍
  */
@@ -111,6 +132,8 @@ const doJoinTeam = async (passwordVal?:string) => {
 
 }
 
+
+
 /**
  * 跳转到修改队伍的页面
  */
@@ -122,6 +145,46 @@ const doUpdateTeam = (id: number) => {
       id
     }
   })
+}
+
+/**
+ * 进入展示成员列表界面
+ */
+const doMemberList = (id:number, maxNum:number) => {
+  router.push({
+    path: '/team/member/list',
+    query: {
+      teamId: id,
+      maxNum,
+    }
+  })
+}
+
+/**
+ * 进入群聊界面
+ */
+const doGroupChat = (id:number) => {
+  router.push({
+    path: '/chat',
+    query: {
+      id
+    }
+  })
+}
+
+/**
+ * 分享队伍
+ */
+const doShareTeam = (id:number) => {
+  const message = 'http://localhost:5173/team/share/get?id='+id;
+  showDialog({
+    title: '复制链接',
+    message: message,
+    theme: 'round-button',
+  }).then(() => {
+    navigator.clipboard.writeText(message)
+    // on close
+  });
 }
 
 /**

@@ -35,7 +35,8 @@
     if (res?.data?.code === 20000 && res?.data?.data){
       teamList.value = res.data.data
     }else {
-      showFailToast('加载队伍失败，请刷新重试')
+      teamList.value = res.data.data
+      showFailToast(res.data.description)
     }
   }
 

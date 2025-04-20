@@ -5,7 +5,7 @@
     <van-cell title="头像" to="/user/edit" is-link arrow-direction="down" >
       <img style="height: 48px" :src="user.avatarUrl"/>
     </van-cell>
-    <van-cell title="性别" to="/user/edit" is-link arrow-direction="down" :value="user.gender" @click="toEdit('gender','性别',user.gender)" />
+    <van-cell title="性别" to="/user/edit" is-link arrow-direction="down" :value="user.gender=== 0 ? '女' : '男'" @click="toEdit('gender','性别',user.gender === 0 ? '女' : '男')" />
     <van-cell title="电话" to="/user/edit" is-link arrow-direction="down" :value="user.phone" @click="toEdit('phone','电话',user.phone)" />
     <van-cell title="邮箱" to="/user/edit" is-link arrow-direction="down" :value="user.email" @click="toEdit('email','邮箱',user.email)"/>
     <van-cell title="星球编号" :value="user.planetCode" />
@@ -48,6 +48,7 @@ const user = {
     planetCode: '1',
     createTime: new Date(),
   }*/
+
 
 const toEdit = (editKey,editName,currentValue)=>{
   router.push({

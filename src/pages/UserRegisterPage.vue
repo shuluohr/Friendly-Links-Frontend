@@ -16,13 +16,27 @@
           placeholder="请输入密码"
           :rules="[{ required: true, message: '请填写密码' }]"
       />
+      <van-field
+          v-model="checkPassword"
+          type="password"
+          name="确认密码"
+          label="确认密码"
+          placeholder="请输入确认密码"
+          :rules="[{ required: true, message: '请填写确认密码' }]"
+      />
+      <van-field
+          v-model="planetCode"
+          name="编号"
+          label="编号"
+          placeholder="请输入编号"
+          :rules="[{ required: true, message: '请填写编号' }]"
+      />
     </van-cell-group>
     <div style="margin: 16px;">
-      <RouterLink to="/user/register" style="font-size: 12px">没有账号？跳转注册</RouterLink><br><br>
+      <p style="color: red; font-size: 12px">{{resultErr}}</p>
       <van-button round block type="primary" native-type="submit">
         提交
       </van-button>
-
     </div>
   </van-form>
 
@@ -39,20 +53,29 @@
 
   const userAccount = ref('');
   const userPassword = ref('');
+  const checkPassword = ref('');
+  const planetCode = ref('');
+
+  const resultErr = ref()
+
   console.log(route.query)
   const onSubmit = async () => {
-    const loginResult = await myAxios.post('/user/login',{
+    const registerResult = await myAxios.post('/user/register',{
       userAccount: userAccount.value,
-      userPassword: userPassword.value
+      userPassword: userPassword.value,
+      checkPassword: checkPassword.value,
+      planetCode: planetCode.value,
     })
-    console.log(loginResult)
-    if (loginResult.data.code === 20000 && loginResult.data.data ){
-      showSuccessToast('登录成功')
+    console.log(registerResult)
+    if (registerResult.data.code === 20000 && registerResult.data.data ){
+      showSuccessToast('注册成功')
 
-      const redirectUrl = route.query?.redirect as string ?? '/';
+      const redirectUrl = route.query?.redirect as string ?? '/user/login';
       window.location.href = redirectUrl;
+
     }else {
-      showFailToast('登录失败')
+      resultErr.value = registerResult.data.description
+      showFailToast('注册失败')
     }
   };
 </script>

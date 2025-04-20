@@ -2,6 +2,7 @@
   <template v-if="user">
     <van-cell title="用户" :value="user?.username" />
     <van-cell title="修改我的信息" is-link to="/user/update" />
+    <van-cell title="我的好友" is-link to="/user/myJoinFriend" />
     <van-cell title="我创建的队伍" is-link to="/user/team/create" />
     <van-cell title="我加入的队伍" is-link to="/user/team/join" />
   </template>
